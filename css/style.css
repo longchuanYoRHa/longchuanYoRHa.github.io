@@ -390,6 +390,12 @@ body [data-aos='zoom-in'] {
   font-family: var(--font-icon);
   content: "\f105";
 }
+.icon-github:before {
+  content: "\f09b";
+}
+.icon-linkedin:before {
+  content: "\f08c";
+}
 .sidebar-toc-btn:before {
   font-family: var(--font-icon);
   content: "\f0e8";
@@ -2715,6 +2721,15 @@ pre .javascript .function {
 }
 .sidebar-social-icon:hover {
   transform: scale(1.2);
+}
+.icon-github {
+  color: #191717;
+}
+[data-theme="dark"] .icon-github {
+  color: #bc88ff;
+}
+.icon-linkedin {
+  color: #0e76a8;
 }
 .sidebar-menu-icon,
 .sidebar-menu-link {
