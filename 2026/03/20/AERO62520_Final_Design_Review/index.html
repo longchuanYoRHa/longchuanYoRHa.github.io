@@ -1,0 +1,808 @@
+
+  <!DOCTYPE html>
+  <html lang="en"  
+    
+      data-theme-mode="auto"
+    
+  >
+  <head>
+  
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":{"en":"Copy successfully (*^▽^*)"},"fail":{"en":"Copy failed (ﾟ⊿ﾟ)ﾂ"},"copyright":{"enable":false,"count":50,"license_type":"by-nc-sa"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = 'All articles on this blog are licensed under the BY-NC-SA license agreement unless otherwise stated. Please indicate the source when reprinting!';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'https://longchuanyorha.github.io';</script>
+  
+  <title>
+    AERO62520 Coursework 6 — Final Design Review (Team 12) |
+    
+    Shaotong Hong
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+  
+    
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/regular.min.css" integrity="sha384-PmxfVzUpFiyj5ZqzN3upnv7G4x9YAlMQar&#x2F;qCBLEYSaWr&#x2F;DUQ9f&#x2F;8ITCT0aN7byC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/solid.min.css" integrity="sha384-HMy1VqP4zke4zzaS+hmFgbW3QXDYD+qtueW3unq30MTgdOnarIgANSya8s5qKRh5" crossorigin="anonymous">
+
+    <link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/brands.min.css" integrity="sha384-IzIkDWjFFaoFz413tu2x9R4cMiJ3EGuxOf&#x2F;7Q8X0LFhqz9fU5zT2go7BgenYdKgN" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/v5-font-face.min.css" integrity="sha384-691KBFHHuy2pnDTyR36VZ90jy7dXWBfC5D1nzy5rkDlqQQ&#x2F;vRs&#x2F;nmmK++LBfAp&#x2F;C" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/v4-font-face.min.css" integrity="sha384-7c0mz5ReY2wCEDKNNEdrKdbtS&#x2F;6+5dEgNsz&#x2F;dU3e9m7xldAdTFwNTAuX+s4sJHJl" crossorigin="anonymous">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="Summary of my role in the University of Manchester MSc Robotics AERO62520 group project — an autonomous Leo Rover with vision, SLAM, Nav2, and a MyCobot arm — focusing on software architecture, centra">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AERO62520 Coursework 6 — Final Design Review (Team 12)">
+<meta property="og:url" content="https://longchuanyorha.github.io/2026/03/20/AERO62520_Final_Design_Review/index.html">
+<meta property="og:site_name" content="Shaotong Hong">
+<meta property="og:description" content="Summary of my role in the University of Manchester MSc Robotics AERO62520 group project — an autonomous Leo Rover with vision, SLAM, Nav2, and a MyCobot arm — focusing on software architecture, centra">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://longchuanyorha.github.io/images/Roverproto.jpg">
+<meta property="og:image" content="https://longchuanyorha.github.io/images/Team.jpg">
+<meta property="article:published_time" content="2026-03-20T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-12T20:09:07.930Z">
+<meta property="article:author" content="Shaotong Hong">
+<meta property="article:tag" content="Computer Vision">
+<meta property="article:tag" content="Intel RealSense">
+<meta property="article:tag" content="Leo Rover">
+<meta property="article:tag" content="MyCobot">
+<meta property="article:tag" content="Nav2">
+<meta property="article:tag" content="OpenVINO">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="ROS2">
+<meta property="article:tag" content="Teamwork">
+<meta property="article:tag" content="University of Manchester">
+<meta property="article:tag" content="YOLO11">
+<meta property="article:tag" content="slam_toolbox">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://longchuanyorha.github.io/images/Roverproto.jpg">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Shaotong Hong" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://fastly.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css" integrity="sha384-IfxC36XL&#x2F;toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx&#x2F;1oA&#x2F;0l8ysE" crossorigin="anonymous">
+  
+  
+  
+  
+    
+<script src="https://fastly.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@reimujs/aos@0.1.2/dist/aos.css" integrity="sha384-GMRP93c6Hkz9JVKGAuRR3nTS7M07RwPgTFenXiosjq2VbVgvdDNcz1g6Mkj8AONa" crossorigin="anonymous">
+
+  
+  
+  
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/webfonts/fa-regular-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/webfonts/fa-brands-400.woff2">
+
+  
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+  <body>
+    
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi rotate">
+        
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+        
+      </div>
+      
+      
+        
+      
+      <div class="loading-word">Loading...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var loaderEl = document.getElementById('loader');
+    var startLoading = () => {
+      time = Date.now();
+      loaderEl.classList.remove("loading");
+    }
+    var hideLoader = () => {
+      document.body.style.overflow = 'auto';
+      loader.classList.add('loading');
+    };
+
+    var endLoading = () => {
+      if (!time) {
+        hideLoader();
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          hideLoader();
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    loaderEl.addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip"></div>
+<div id="heatmap-tooltip"></div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav" aria-label="Primary navigation">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+             
+              
+                &#xf286;
+              
+             
+          </div>
+          <a class="main-nav-link" href="/">Home</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+             
+              
+                &#xf187;
+              
+             
+          </div>
+          <a class="main-nav-link" href="/archives">Archives</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+             
+              
+                &#xf2c1;
+              
+             
+          </div>
+          <a class="main-nav-link" href="/about">Personal CV</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon" aria-label="Toggle navigation" role="button"></a>
+  </nav>
+  <nav id="sub-nav" aria-label="Secondary navigation">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed" aria-label="RSS Feed" target="_blank"></a>
+    
+    
+  </nav>
+  
+</div>
+<header id="header" aria-label="Site header">
+  
+    <picture></picture>
+    <img  fetchpriority="high" src="/covers/cover4.webp" alt="AERO62520 Coursework 6 — Final Design Review (Team 12)">
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <span id="logo">
+            <h1 data-aos="slide-up">AERO62520 Coursework 6 — Final Design Review (Team 12)</h1>
+          </span>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content" aria-label="Page content"  class="sidebar-right" >
+          <aside id="sidebar" aria-label="Sidebar">
+  
+  <div class="sidebar-wrapper-container sticky">
+  
+    
+    
+  
+ 
+  <div class="sidebar-wrapper">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        
+          <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+  
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AERO62520-Project-Autonomous-Mobile-Manipulator-Final-Design-Review"><span class="toc-number">1.</span> <span class="toc-text">AERO62520 Project: Autonomous Mobile Manipulator (Final Design Review)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Project-Overview"><span class="toc-number">1.1.</span> <span class="toc-text">Project Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#My-Role-and-Contributions"><span class="toc-number">1.2.</span> <span class="toc-text">My Role and Contributions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Central-control-and-system-software"><span class="toc-number">1.2.1.</span> <span class="toc-text">Central control and system software</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vision-stack-context-team-subsystem-documented-in-FDR"><span class="toc-number">1.2.2.</span> <span class="toc-text">Vision stack context (team subsystem; documented in FDR)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Navigation-and-integration"><span class="toc-number">1.2.3.</span> <span class="toc-text">Navigation and integration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Technical-Highlights"><span class="toc-number">1.3.</span> <span class="toc-text">Technical Highlights</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Final-Design-Review-Report"><span class="toc-number">1.4.</span> <span class="toc-text">Final Design Review Report</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reflection"><span class="toc-number">1.5.</span> <span class="toc-text">Reflection</span></a></li></ol></li></ol>
+  
+</div>
+</div>
+          <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Shaotong Hong" class="lazyload">
+  <div class="sidebar-author-name">Shaotong Hong</div>
+  <div class="sidebar-description">Research interests: • Reinforcement learning, •Robot–human interface, •Mechanical design for robotics, •Robotics systems engineering.</div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>Post</div>
+    <div class="sidebar-state-number">8</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>Category</div>
+    <div class="sidebar-state-number">0</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>Tag</div>
+    <div class="sidebar-state-number">32</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+    <div class="icon-github sidebar-social-icon">
+      <a href=https://github.com/longchuanYoRHa itemprop="url" target="_blank" aria-label="github" rel="noopener nofollow noreferrer"></a>
+    </div>
+  
+    <div class="icon-linkedin sidebar-social-icon">
+      <a href=https://www.linkedin.com/in/shaotong-hong-1b029a2b5/ itemprop="url" target="_blank" aria-label="linkedin" rel="noopener nofollow noreferrer"></a>
+    </div>
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="Home"></a>
+        <div class="sidebar-menu-icon icon ">
+          
+            
+              &#xf286;
+            
+          
+        </div>
+        <div class="sidebar-menu-link">Home</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="Archives"></a>
+        <div class="sidebar-menu-icon icon ">
+          
+            
+              &#xf187;
+            
+          
+        </div>
+        <div class="sidebar-menu-link">Archives</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="Personal CV"></a>
+        <div class="sidebar-menu-icon icon ">
+          
+            
+              &#xf2c1;
+            
+          
+        </div>
+        <div class="sidebar-menu-link">Personal CV</div>
+      </div>
+    
+  
+</div>
+</div>
+        
+      
+      
+        
+          <div class="sidebar-btn-wrapper" style="position:static">
+            <div class="sidebar-toc-btn current"></div>
+            <div class="sidebar-common-btn"></div>
+          </div>
+        
+      
+    </div>
+  </div>
+  
+  <div class="sidebar-widget">
+  
+  </div>
+  
+  </div>
+  
+</aside>
+
+          <section id="main" aria-label="Main content"><article id="post-AERO62520_Final_Design_Review" class="h-entry article" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <span class="article-date-link icon-calendar" data-aos="zoom-in">
+    <time datetime="2026-03-20T00:00:00.000Z" itemprop="datePublished">2026-03-20</time>
+    <time style="display: none;" id="post-update-time">2026-04-12</time>
+  </span>
+  
+</div>
+
+      
+
+    </div>
+    
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+      
+        <h1 id="AERO62520-Project-Autonomous-Mobile-Manipulator-Final-Design-Review"><a href="#AERO62520-Project-Autonomous-Mobile-Manipulator-Final-Design-Review" class="headerlink" title="AERO62520 Project: Autonomous Mobile Manipulator (Final Design Review)"></a>AERO62520 Project: Autonomous Mobile Manipulator (Final Design Review)</h1><p><a target="_blank" rel="noopener" href="https://github.com/longchuanYoRHa/Group12_team_space.git">Team Repository on GitHub</a></p>
+<hr>
+<h2 id="Project-Overview"><a href="#Project-Overview" class="headerlink" title="Project Overview"></a>Project Overview</h2><div style="text-align: center;">
+  <img src="/images/Roverproto.jpg" alt="prototype of the rover" style="width: 70%; height: auto;">
+  <p style="font-size: 14px; color: #666; margin-top: 10px; font-style: italic;">
+    prototype of the rover
+  </p>
+</div>
+
+<p>The goal is an <strong>autonomous rover</strong> that can explore unknown terrain, <strong>detect target blocks with computer vision</strong>, <strong>grasp them with an integrated manipulator</strong>, and <strong>deliver payloads to designated collection points</strong> — bringing together <strong>SLAM-based localization</strong>, <strong>Nav2 navigation</strong>, <strong>inverse kinematics for the arm</strong>, and a <strong>mechanically stable payload</strong> on the <strong>Leo Rover 1.8</strong> platform.</p>
+<hr>
+<h2 id="My-Role-and-Contributions"><a href="#My-Role-and-Contributions" class="headerlink" title="My Role and Contributions"></a>My Role and Contributions</h2><p><strong>Shaotong Hong</strong> led <strong>Software Design</strong> for the FDR documentation and owned the <strong>navigation and software-integration</strong> thread on the project plan — from <strong>Nav2 bringup</strong> and <strong>exploration strategy</strong> work through <strong>simulation and hardware tests</strong>, <strong>Action-oriented explore-node integration</strong>, and <strong>arm–camera–NUC–rover integration</strong> (with teammates).</p>
+<h3 id="Central-control-and-system-software"><a href="#Central-control-and-system-software" class="headerlink" title="Central control and system software"></a>Central control and system software</h3><div style="text-align: center;">
+  <video width="40%" controls>
+    <source src="/images/Autoexplore.mp4" type="video/mp4">
+    your browser does not support the video tag.
+  </video>
+  <p style="font-size: 12px; color: #888; margin-top: 5px;">
+    <em>The robot is exploring the environment</em>
+  </p>
+</div>
+
+<ul>
+<li>Authored the <strong>software design narrative</strong> for the FDR: <strong>system software block diagram</strong>, <strong>central control state machine</strong> on the NUC, and alignment with <strong>live RQT graphs</strong> during operation.  </li>
+<li>The <strong>task-oriented FSM</strong> (e.g. <strong>EXPLORE</strong>, <strong>GRASP</strong>, <strong>PLACE_IN_BIN</strong>, navigation-to-object &#x2F; pre-place states) coordinates <strong>asynchronous perception, navigation completion, and arm status</strong>; it includes <strong>robustness measures</strong> such as <strong>interest-point blacklisting on timeout</strong> and distinct logic for <strong>loaded vs. unloaded</strong> operation.</li>
+</ul>
+<h3 id="Vision-stack-context-team-subsystem-documented-in-FDR"><a href="#Vision-stack-context-team-subsystem-documented-in-FDR" class="headerlink" title="Vision stack context (team subsystem; documented in FDR)"></a>Vision stack context (team subsystem; documented in FDR)</h3><div style="text-align: center;">
+  <img src="/images/Team.jpg" alt="Team" style="width: 70%; height: auto;">
+  <p style="font-size: 14px; color: #666; margin-top: 10px; font-style: italic;">
+    Team 12
+  </p>
+</div>
+
+<p>The report’s <strong>vision section</strong> (benchmarking and implementation) is part of the integrated software story I helped tie to the rest of the stack:</p>
+<ul>
+<li><strong>Model selection:</strong> weighted comparison of <strong>YOLOv8n</strong>, <strong>YOLO11n</strong>, and <strong>RT-DETR-L</strong>; <strong>YOLO11n</strong> was chosen for the best balance of <strong>speed (~58 FPS)</strong>, <strong>accuracy</strong>, and <strong>resource use</strong> on the NUC.  </li>
+<li><strong>Inference:</strong> <strong>OpenVINO</strong> with <strong><code>intel:gpu</code></strong>, <strong>640×480</strong> input, and <strong>high confidence threshold</strong> to limit false positives.  </li>
+<li><strong>Spatial reasoning:</strong> <strong>RealSense D435i</strong> depth aligned to color, <strong>3D deprojection</strong>, and <strong>width-based categorization</strong> (e.g. cube vs. bin).  </li>
+<li><strong>Safety and modularity:</strong> <strong>topic routing</strong> by color&#x2F;size namespaces and a <strong>MAX_Z_LIMIT</strong> gatekeeper so targets stay within the <strong>MyCobot 280 Pi</strong> workspace.</li>
+</ul>
+<h3 id="Navigation-and-integration"><a href="#Navigation-and-integration" class="headerlink" title="Navigation and integration"></a>Navigation and integration</h3><ul>
+<li><strong>Nav2 + SLAM (slam_toolbox)</strong> pipeline on the NUC with <strong>RPLidar A2M12</strong>; exploration strategy evaluation (<strong>frontier &#x2F; coverage</strong>, <strong>m-explore-ros2</strong> suitability) and <strong>integration tests</strong> on <strong>simulation and real hardware</strong>.  </li>
+<li><strong>Explore node</strong> extended with an <strong>Action interface</strong> for <strong>orchestration and interrupt&#x2F;cancel</strong> behaviour, integrated with <strong>bringup</strong> and tested under <strong>external interrupt</strong> scenarios.  </li>
+<li><strong>Joint integration:</strong> <strong>arm–camera–NUC–rover</strong> together with <strong>Qikai Sun</strong> to close the loop from perception to base motion and manipulation.</li>
+</ul>
+<hr>
+<h2 id="Technical-Highlights"><a href="#Technical-Highlights" class="headerlink" title="Technical Highlights"></a>Technical Highlights</h2><ul>
+<li><strong>Robot platform:</strong> Leo Rover 1.8 + Intel NUC + <strong>MyCobot 280 Pi</strong> + <strong>RealSense D435i</strong> + <strong>RPLidar A2M12</strong>  </li>
+<li><strong>Middleware:</strong> ROS2, <strong>Nav2</strong>, <strong>slam_toolbox</strong>, <strong>FastDDS</strong> XML hardening (as described in the FDR cyber-security section)  </li>
+<li><strong>Perception:</strong> <strong>YOLO11n</strong> via <strong>OpenVINO</strong> (GPU), spatial validation and topic routing  </li>
+<li><strong>Mission logic:</strong> <strong>FSM</strong>-style <strong>central controller</strong> (<code>task_manager</code>) coordinating <strong>explore</strong>, <strong>vision</strong>, and <strong>arm</strong> nodes  </li>
+<li><strong>Power:</strong> <strong>2× Anker Prime 26K</strong> USB-C PD delivery to NUC and manipulator (major mass reduction vs. earlier baseline, per report)  </li>
+<li><strong>Languages &#x2F; tooling:</strong> <strong>Python</strong>, C++ where applicable, <strong>RQT</strong> for runtime graph verification</li>
+</ul>
+<hr>
+<h2 id="Final-Design-Review-Report"><a href="#Final-Design-Review-Report" class="headerlink" title="Final Design Review Report"></a>Final Design Review Report</h2><div style="text-align: center; margin: 20px 0;">
+  <a href="/images/AERO62520_CW6_Final_Design_Review_v2.pdf" target="_blank" style="text-decoration: none;">
+    <div style="display: inline-block; padding: 15px 30px; background: #f5f5f5; border-radius: 8px; border: 2px solid #ddd; transition: all 0.3s;">
+      <span style="font-size: 24px; margin-right: 10px;">📄</span>
+      <span style="font-size: 16px; color: #333;">AERO62520 Final Design Review (PDF)</span>
+    </div>
+  </a>
+</div>
+
+<hr>
+<h2 id="Reflection"><a href="#Reflection" class="headerlink" title="Reflection"></a>Reflection</h2><p>Working through this FDR deepened my experience with <strong>end-to-end autonomous mobile manipulation</strong>: not only <strong>Nav2 and exploration</strong> on a real rover, but also how <strong>perception outputs</strong>, <strong>state machines</strong>, and <strong>manipulator commands</strong> must stay <strong>modular, verifiable, and safe</strong> under timing and power constraints. Aligning <strong>design diagrams</strong> with <strong>live RQT topology</strong> and <strong>requirements verification</strong> made the difference between a “collection of nodes” and a <strong>mission-ready system architecture</strong>.</p>
+<hr>
+<div align="center">
+
+<p><em>“A field robot is only as trustworthy as the glue between its map, its pixels, and its states.”</em></p>
+</div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Computer-Vision/" rel="tag" title="Computer Vision">Computer Vision</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Intel-RealSense/" rel="tag" title="Intel RealSense">Intel RealSense</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Leo-Rover/" rel="tag" title="Leo Rover">Leo Rover</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/MyCobot/" rel="tag" title="MyCobot">MyCobot</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Nav2/" rel="tag" title="Nav2">Nav2</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/OpenVINO/" rel="tag" title="OpenVINO">OpenVINO</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Python/" rel="tag" title="Python">Python</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/ROS2/" rel="tag" title="ROS2">ROS2</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Teamwork/" rel="tag" title="Teamwork">Teamwork</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/University-of-Manchester/" rel="tag" title="University of Manchester">University of Manchester</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/YOLO11/" rel="tag" title="YOLO11">YOLO11</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/slam-toolbox/" rel="tag" title="slam_toolbox">slam_toolbox</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" aria-label="Article navigation" data-aos="fade-up">
+    
+    
+    
+    <div class="article-nav-link-wrap right">
+      
+        <img data-src="/covers/cover8.webp" data-sizes="auto" alt="Summer Placement — AgiBot Robotics" class="lazyload">
+      
+      <a href="/2025/10/29/AgiBot/" aria-label="Next: Summer Placement — AgiBot Robotics"  title="Next: Summer Placement — AgiBot Robotics"></a>
+      <div class="article-nav-caption">Next</div>
+      <h3 class="article-nav-title">
+        
+          Summer Placement — AgiBot Robotics
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+
+
+
+
+
+
+
+
+
+</section>
+        </div>
+        <footer id="footer" aria-label="Site footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      
+      
+      
+        2020-2026
+      
+      <span class="footer-info-sep rotate"></span>
+      Shaotong Hong
+    </div>
+    
+      <div>
+        Powered by&nbsp;<a href="https://hexo.io/" rel="noopener nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        3.3k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        00:24
+      </div>
+    
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">Number of visits&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">Number of visitors&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav" aria-label="Mobile navigation">
+  <div class="sidebar-wrap">
+    
+      
+        <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+  
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AERO62520-Project-Autonomous-Mobile-Manipulator-Final-Design-Review"><span class="toc-number">1.</span> <span class="toc-text">AERO62520 Project: Autonomous Mobile Manipulator (Final Design Review)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Project-Overview"><span class="toc-number">1.1.</span> <span class="toc-text">Project Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#My-Role-and-Contributions"><span class="toc-number">1.2.</span> <span class="toc-text">My Role and Contributions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Central-control-and-system-software"><span class="toc-number">1.2.1.</span> <span class="toc-text">Central control and system software</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vision-stack-context-team-subsystem-documented-in-FDR"><span class="toc-number">1.2.2.</span> <span class="toc-text">Vision stack context (team subsystem; documented in FDR)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Navigation-and-integration"><span class="toc-number">1.2.3.</span> <span class="toc-text">Navigation and integration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Technical-Highlights"><span class="toc-number">1.3.</span> <span class="toc-text">Technical Highlights</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Final-Design-Review-Report"><span class="toc-number">1.4.</span> <span class="toc-text">Final Design Review Report</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reflection"><span class="toc-number">1.5.</span> <span class="toc-text">Reflection</span></a></li></ol></li></ol>
+  
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Shaotong Hong" class="lazyload">
+  <div class="sidebar-author-name">Shaotong Hong</div>
+  <div class="sidebar-description">Research interests: • Reinforcement learning, •Robot–human interface, •Mechanical design for robotics, •Robotics systems engineering.</div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>Post</div>
+    <div class="sidebar-state-number">8</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>Category</div>
+    <div class="sidebar-state-number">0</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>Tag</div>
+    <div class="sidebar-state-number">32</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+    <div class="icon-github sidebar-social-icon">
+      <a href=https://github.com/longchuanYoRHa itemprop="url" target="_blank" aria-label="github" rel="noopener nofollow noreferrer"></a>
+    </div>
+  
+    <div class="icon-linkedin sidebar-social-icon">
+      <a href=https://www.linkedin.com/in/shaotong-hong-1b029a2b5/ itemprop="url" target="_blank" aria-label="linkedin" rel="noopener nofollow noreferrer"></a>
+    </div>
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="Home"></a>
+        <div class="sidebar-menu-icon icon ">
+          
+            
+              &#xf286;
+            
+          
+        </div>
+        <div class="sidebar-menu-link">Home</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="Archives"></a>
+        <div class="sidebar-menu-icon icon ">
+          
+            
+              &#xf187;
+            
+          
+        </div>
+        <div class="sidebar-menu-link">Archives</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="Personal CV"></a>
+        <div class="sidebar-menu-icon icon ">
+          
+            
+              &#xf2c1;
+            
+          
+        </div>
+        <div class="sidebar-menu-link">Personal CV</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+    
+  </div>
+  
+    
+      <div class="sidebar-btn-wrapper">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div>
+    
+  
+</nav>
+
+    </div>
+    
+    
+    
+    
+<script src="https://fastly.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://fastly.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+
+
+
+
+  
+<script src="https://fastly.jsdelivr.net/npm/mouse-firework@0.1.1/dist/index.umd.js" integrity="sha384-8LyaidD9GPxQQgLJO&#x2F;WRw&#x2F;O2h3BoNq&#x2F;ApI&#x2F;ecpvM6RsrCz2qP2ppBXUKihP4V&#x2F;2d" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["var(--red-1)","var(--red-2)","var(--red-3)","var(--red-4)"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["var(--red-0)"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "Shaotong Hong",
+          title: "AERO62520 Coursework 6 — Final Design Review (Team 12)",
+          url: "https://longchuanyorha.github.io/2026/03/20/AERO62520_Final_Design_Review/",
+          excerpt: "Summary of my role in the University of Manchester MSc Robotics AERO62520 group project — an autonomous Leo Rover with vision, SLAM, Nav2, and a MyCobot arm — focusing on software architecture, central control FSM, navigation integration, and full-stack ROS2 orchestration.",
+          description: "Summary of my role in the University of Manchester MSc Robotics AERO62520 group project — an autonomous Leo Rover with vision, SLAM, Nav2, and a MyCobot arm — focusing on software architecture, central control FSM, navigation integration, and full-stack ROS2 orchestration.",
+          stripContent: "AERO62520 Project: Autonomous Mobile Manipulator (Final Design Review)Team Repository on GitHub  Project Overview           prototype of the rover      The goal is an autonomous rover that can explore unknown terrain, detect target blocks with comput",
+          date: "Fri Mar 20 2026 00:00:00 GMT+0000",
+          updated: "Sun Apr 12 2026 21:09:07 GMT+0100",
+          cover: "/covers/cover4.webp",
+        };
+      </script>
+       
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+        
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://fastly.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        const initPswp = (gallery, children) => {
+          if (_$$(`${gallery} ${children}`).length > 0) {
+            new PhotoSwipeLightbox({
+              gallery,
+              children,
+              pswpModule: () => safeImport("https://fastly.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+        }
+        const pswp = () => {
+          initPswp('.article-entry', 'a.article-gallery-item');
+          initPswp('.article-gallery', 'a.article-gallery-item');
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.10.1' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+
+  
+<script src="https://fastly.jsdelivr.net/npm/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+
+
+
+
+
+    
+  </body>
+  </html>
+
