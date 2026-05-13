@@ -1,0 +1,982 @@
+
+  <!DOCTYPE html>
+  <html lang="en"  
+    
+      data-theme-mode="auto"
+    
+  >
+  <head>
+  
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":{"en":"Copy successfully (*^▽^*)"},"fail":{"en":"Copy failed (ﾟ⊿ﾟ)ﾂ"},"copyright":{"enable":false,"count":50,"license_type":"by-nc-sa"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = 'All articles on this blog are licensed under the BY-NC-SA license agreement unless otherwise stated. Please indicate the source when reprinting!';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'https://longchuanyorha.github.io';</script>
+  
+  <title>
+    AERO60492 Coursework 3 - UAV Feedback Control Under Wind Disturbance |
+    
+    Shaotong Hong
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+  
+    
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/regular.min.css" integrity="sha384-PmxfVzUpFiyj5ZqzN3upnv7G4x9YAlMQar&#x2F;qCBLEYSaWr&#x2F;DUQ9f&#x2F;8ITCT0aN7byC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/solid.min.css" integrity="sha384-HMy1VqP4zke4zzaS+hmFgbW3QXDYD+qtueW3unq30MTgdOnarIgANSya8s5qKRh5" crossorigin="anonymous">
+
+    <link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/brands.min.css" integrity="sha384-IzIkDWjFFaoFz413tu2x9R4cMiJ3EGuxOf&#x2F;7Q8X0LFhqz9fU5zT2go7BgenYdKgN" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/v5-font-face.min.css" integrity="sha384-691KBFHHuy2pnDTyR36VZ90jy7dXWBfC5D1nzy5rkDlqQQ&#x2F;vRs&#x2F;nmmK++LBfAp&#x2F;C" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/v4-font-face.min.css" integrity="sha384-7c0mz5ReY2wCEDKNNEdrKdbtS&#x2F;6+5dEgNsz&#x2F;dU3e9m7xldAdTFwNTAuX+s4sJHJl" crossorigin="anonymous">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="MSc Robotics coursework project focused on robust UAV position stabilisation under dynamic wind disturbance using cascade control, system identification, and automated tuning.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AERO60492 Coursework 3 - UAV Feedback Control Under Wind Disturbance">
+<meta property="og:url" content="https://longchuanyorha.github.io/2026/05/12/UAV_feedback_controller/index.html">
+<meta property="og:site_name" content="Shaotong Hong">
+<meta property="og:description" content="MSc Robotics coursework project focused on robust UAV position stabilisation under dynamic wind disturbance using cascade control, system identification, and automated tuning.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://longchuanyorha.github.io/images/vx_fit.png">
+<meta property="og:image" content="https://longchuanyorha.github.io/images/outerLoop.png">
+<meta property="article:published_time" content="2026-05-12T23:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-13T21:43:59.495Z">
+<meta property="article:author" content="Shaotong Hong">
+<meta property="article:tag" content="Bayesian Optimisation">
+<meta property="article:tag" content="Control Theory">
+<meta property="article:tag" content="DJI Tello">
+<meta property="article:tag" content="Disturbance Observer">
+<meta property="article:tag" content="PID">
+<meta property="article:tag" content="PyBullet">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Robotics">
+<meta property="article:tag" content="UAV">
+<meta property="article:tag" content="University of Manchester">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://longchuanyorha.github.io/images/vx_fit.png">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Shaotong Hong" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://fastly.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css" integrity="sha384-IfxC36XL&#x2F;toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx&#x2F;1oA&#x2F;0l8ysE" crossorigin="anonymous">
+  
+  
+  
+  
+    
+<script src="https://fastly.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@reimujs/aos@0.1.2/dist/aos.css" integrity="sha384-GMRP93c6Hkz9JVKGAuRR3nTS7M07RwPgTFenXiosjq2VbVgvdDNcz1g6Mkj8AONa" crossorigin="anonymous">
+
+  
+  
+  
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/webfonts/fa-regular-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/webfonts/fa-brands-400.woff2">
+
+  
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+  <body>
+    
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi rotate">
+        
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+        
+      </div>
+      
+      
+        
+      
+      <div class="loading-word">Loading...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var loaderEl = document.getElementById('loader');
+    var startLoading = () => {
+      time = Date.now();
+      loaderEl.classList.remove("loading");
+    }
+    var hideLoader = () => {
+      document.body.style.overflow = 'auto';
+      loader.classList.add('loading');
+    };
+
+    var endLoading = () => {
+      if (!time) {
+        hideLoader();
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          hideLoader();
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    loaderEl.addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip"></div>
+<div id="heatmap-tooltip"></div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav" aria-label="Primary navigation">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+             
+              
+                &#xf286;
+              
+             
+          </div>
+          <a class="main-nav-link" href="/">Home</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+             
+              
+                &#xf187;
+              
+             
+          </div>
+          <a class="main-nav-link" href="/archives">Archives</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+             
+              
+                &#xf2c1;
+              
+             
+          </div>
+          <a class="main-nav-link" href="/about">Personal CV</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon" aria-label="Toggle navigation" role="button"></a>
+  </nav>
+  <nav id="sub-nav" aria-label="Secondary navigation">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed" aria-label="RSS Feed" target="_blank"></a>
+    
+    
+  </nav>
+  
+</div>
+<header id="header" aria-label="Site header">
+  
+    <picture></picture>
+    <img  fetchpriority="high" src="/covers/cover10.webp" alt="AERO60492 Coursework 3 - UAV Feedback Control Under Wind Disturbance">
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <span id="logo">
+            <h1 data-aos="slide-up">AERO60492 Coursework 3 - UAV Feedback Control Under Wind Disturbance</h1>
+          </span>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content" aria-label="Page content"  class="sidebar-right" >
+          <aside id="sidebar" aria-label="Sidebar">
+  
+  <div class="sidebar-wrapper-container sticky">
+  
+    
+    
+  
+ 
+  <div class="sidebar-wrapper">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        
+          <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+  
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AERO60492-Coursework-3-UAV-Feedback-Control-Under-Wind-Disturbance"><span class="toc-number">1.</span> <span class="toc-text">AERO60492 Coursework 3: UAV Feedback Control Under Wind Disturbance</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Project-Overview"><span class="toc-number">1.1.</span> <span class="toc-text">Project Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Understanding-the-Provided-Tello-Inner-Loop"><span class="toc-number">1.2.</span> <span class="toc-text">Understanding the Provided Tello Inner Loop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Inner-Loop-Identification-Results"><span class="toc-number">1.3.</span> <span class="toc-text">Inner-Loop Identification Results</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Outer-Loop-Controller-Design"><span class="toc-number">1.4.</span> <span class="toc-text">Outer-Loop Controller Design</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Layer-1-%E2%80%94-Position-Loop"><span class="toc-number">1.4.1.</span> <span class="toc-text">Layer 1 — Position Loop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Layer-2-%E2%80%94-Velocity-Loop"><span class="toc-number">1.4.2.</span> <span class="toc-text">Layer 2 — Velocity Loop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Layer-3-%E2%80%94-Yaw-Loop"><span class="toc-number">1.4.3.</span> <span class="toc-text">Layer 3 — Yaw Loop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Disturbance-Rejection-Strategy"><span class="toc-number">1.5.</span> <span class="toc-text">Disturbance Rejection Strategy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bayesian-Optimisation-Tuning"><span class="toc-number">1.6.</span> <span class="toc-text">Bayesian Optimisation Tuning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Simulation-Environment"><span class="toc-number">1.7.</span> <span class="toc-text">Simulation Environment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Real-Tello-Experiment"><span class="toc-number">1.8.</span> <span class="toc-text">Real Tello Experiment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Technical-Highlights"><span class="toc-number">1.9.</span> <span class="toc-text">Technical Highlights</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Key-Lessons-Learned"><span class="toc-number">1.10.</span> <span class="toc-text">Key Lessons Learned</span></a></li></ol></li></ol>
+  
+</div>
+</div>
+          <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Shaotong Hong" class="lazyload">
+  <div class="sidebar-author-name">Shaotong Hong</div>
+  <div class="sidebar-description">Research interests: • Reinforcement learning, •Robot–human interface, •Mechanical design for robotics, •Robotics systems engineering.</div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>Post</div>
+    <div class="sidebar-state-number">9</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>Category</div>
+    <div class="sidebar-state-number">0</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>Tag</div>
+    <div class="sidebar-state-number">40</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+    <div class="icon-github sidebar-social-icon">
+      <a href=https://github.com/longchuanYoRHa itemprop="url" target="_blank" aria-label="github" rel="noopener nofollow noreferrer"></a>
+    </div>
+  
+    <div class="icon-linkedin sidebar-social-icon">
+      <a href=https://www.linkedin.com/in/shaotong-hong-1b029a2b5/ itemprop="url" target="_blank" aria-label="linkedin" rel="noopener nofollow noreferrer"></a>
+    </div>
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="Home"></a>
+        <div class="sidebar-menu-icon icon ">
+          
+            
+              &#xf286;
+            
+          
+        </div>
+        <div class="sidebar-menu-link">Home</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="Archives"></a>
+        <div class="sidebar-menu-icon icon ">
+          
+            
+              &#xf187;
+            
+          
+        </div>
+        <div class="sidebar-menu-link">Archives</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="Personal CV"></a>
+        <div class="sidebar-menu-icon icon ">
+          
+            
+              &#xf2c1;
+            
+          
+        </div>
+        <div class="sidebar-menu-link">Personal CV</div>
+      </div>
+    
+  
+</div>
+</div>
+        
+      
+      
+        
+          <div class="sidebar-btn-wrapper" style="position:static">
+            <div class="sidebar-toc-btn current"></div>
+            <div class="sidebar-common-btn"></div>
+          </div>
+        
+      
+    </div>
+  </div>
+  
+  <div class="sidebar-widget">
+  
+  </div>
+  
+  </div>
+  
+</aside>
+
+          <section id="main" aria-label="Main content"><article id="post-UAV_feedback_controller" class="h-entry article" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <span class="article-date-link icon-calendar" data-aos="zoom-in">
+    <time datetime="2026-05-12T23:00:00.000Z" itemprop="datePublished">2026-05-13</time>
+    <time style="display: none;" id="post-update-time">2026-05-13</time>
+  </span>
+  
+</div>
+
+      
+
+    </div>
+    
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+      
+        <h1 id="AERO60492-Coursework-3-UAV-Feedback-Control-Under-Wind-Disturbance"><a href="#AERO60492-Coursework-3-UAV-Feedback-Control-Under-Wind-Disturbance" class="headerlink" title="AERO60492 Coursework 3: UAV Feedback Control Under Wind Disturbance"></a>AERO60492 Coursework 3: UAV Feedback Control Under Wind Disturbance</h1><hr>
+<h2 id="Project-Overview"><a href="#Project-Overview" class="headerlink" title="Project Overview"></a>Project Overview</h2><div style="text-align: center;">
+  <video width="40%" controls>
+    <source src="/images/202605101233(2).mp4" type="video/mp4">
+    your browser does not support the video tag.
+  </video>
+  <p style="font-size: 12px; color: #888; margin-top: 5px;">
+    <em>Project explanation video</em>
+  </p>
+</div>
+
+
+<p>This project focused on developing an advanced feedback controller for UAV position stabilisation under dynamic wind disturbance using the provided PyBullet-based DJI Tello simulation environment. The coursework required designing an outer-loop controller that receives UAV position and attitude feedback and outputs velocity and yaw-rate commands. :contentReference[oaicite:0]{index&#x3D;0}</p>
+<p>The primary challenge was that the provided Tello stack already contains an internal cascade velocity–attitude–rate controller. Therefore, the outer controller does not interact with an ideal integrator, but instead with a slow and delayed closed-loop plant. This significantly affects controller stability, tuning difficulty, and wind rejection capability.</p>
+<p>The final solution combined:</p>
+<ul>
+<li>Inner-loop system identification</li>
+<li>Cascade PID outer-loop control</li>
+<li>Velocity estimation from finite differencing</li>
+<li>Disturbance-rejection compensation</li>
+<li>Bayesian optimisation-based automatic tuning</li>
+<li>Experimental comparison between simulation and real UAV deployment</li>
+</ul>
+<hr>
+<h2 id="Understanding-the-Provided-Tello-Inner-Loop"><a href="#Understanding-the-Provided-Tello-Inner-Loop" class="headerlink" title="Understanding the Provided Tello Inner Loop"></a>Understanding the Provided Tello Inner Loop</h2><div style="text-align: center;">
+  <img src="/images/vx_fit.png" alt="Inner loop identification" style="width: 60%; height: auto;">
+  <p style="font-size: 14px; color: #666; margin-top: 10px; font-style: italic;">
+    Identified inner-loop velocity response characteristics
+  </p>
+</div>
+
+<p>The provided simulator already contains a complete Tello control stack:</p>
+<ul>
+<li>Velocity PID loop</li>
+<li>Attitude PID loop</li>
+<li>Angular-rate PID loop</li>
+<li>Motor mixing and thrust allocation</li>
+</ul>
+<p>implemented inside <code>TelloController</code>. :contentReference[oaicite:1]{index&#x3D;1}</p>
+<p>This means the coursework controller only acts as a high-level outer loop generating velocity commands.</p>
+<p>To properly design the outer controller, the inner-loop dynamics were first identified experimentally using direct command injection into the Tello stack. A dedicated identification script was developed to fit transfer functions for:</p>
+<ul>
+<li><code>vx</code></li>
+<li><code>vy</code></li>
+<li><code>vz</code></li>
+<li><code>yaw_rate</code></li>
+</ul>
+<p>using first-order, second-order, and second-order-plus-zero models. :contentReference[oaicite:2]{index&#x3D;2}</p>
+<hr>
+<h2 id="Inner-Loop-Identification-Results"><a href="#Inner-Loop-Identification-Results" class="headerlink" title="Inner-Loop Identification Results"></a>Inner-Loop Identification Results</h2><p>The identified horizontal velocity dynamics exhibited:</p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Model</th>
+<th>Bandwidth</th>
+<th>Overshoot</th>
+<th>Delay</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vx &#x2F; vy</td>
+<td>Second-order + zero + delay</td>
+<td>≈0.25 Hz</td>
+<td>22.8%</td>
+<td>115 ms</td>
+</tr>
+<tr>
+<td>vz</td>
+<td>First-order</td>
+<td>≈0.96 Hz</td>
+<td>Minimal</td>
+<td>56 ms</td>
+</tr>
+<tr>
+<td>yaw_rate</td>
+<td>Second-order</td>
+<td>≈9.68 Hz</td>
+<td>56%</td>
+<td>≈0 ms</td>
+</tr>
+</tbody></table>
+<p>:contentReference[oaicite:3]{index&#x3D;3}</p>
+<p>The key observation is that the horizontal channels are extremely slow and lightly damped compared to the vertical and yaw dynamics. This makes direct position control unstable if aggressive gains are used.</p>
+<p>The identified system can be approximated as:</p>
+<ul>
+<li>horizontal axes → second-order + zero + delay system</li>
+<li>vertical axis → first-order system</li>
+<li>yaw → fast second-order system</li>
+</ul>
+<p>This justified the use of a cascade control structure and conservative bandwidth separation.</p>
+<hr>
+<h2 id="Outer-Loop-Controller-Design"><a href="#Outer-Loop-Controller-Design" class="headerlink" title="Outer-Loop Controller Design"></a>Outer-Loop Controller Design</h2><div style="text-align: center;">
+  <img src="/images/outerLoop.png" alt="Outer loop structure" style="width: 75%; height: auto;">
+  <p style="font-size: 14px; color: #666; margin-top: 10px; font-style: italic;">
+    Cascade outer-loop controller with disturbance rejection
+  </p>
+</div>
+
+<p>The final controller uses a cascade PID structure:</p>
+<h3 id="Layer-1-—-Position-Loop"><a href="#Layer-1-—-Position-Loop" class="headerlink" title="Layer 1 — Position Loop"></a>Layer 1 — Position Loop</h3><p>Position error is converted into a desired velocity setpoint in the world frame.</p>
+<h3 id="Layer-2-—-Velocity-Loop"><a href="#Layer-2-—-Velocity-Loop" class="headerlink" title="Layer 2 — Velocity Loop"></a>Layer 2 — Velocity Loop</h3><p>Velocity error is regulated in the body-yaw frame using estimated velocity derived from position differencing between controller calls.</p>
+<h3 id="Layer-3-—-Yaw-Loop"><a href="#Layer-3-—-Yaw-Loop" class="headerlink" title="Layer 3 — Yaw Loop"></a>Layer 3 — Yaw Loop</h3><p>Yaw angle error generates yaw-rate commands.</p>
+<p>The implemented controller architecture is shown directly in the submitted <code>controller.py</code>. :contentReference[oaicite:4]{index&#x3D;4}</p>
+<p>The controller also includes:</p>
+<ul>
+<li>Integral anti-windup</li>
+<li>Velocity saturation</li>
+<li>Coordinate-frame transformation</li>
+<li>Body-frame velocity estimation</li>
+<li>Persistent-state memory between calls</li>
+</ul>
+<p>The final implementation was specifically designed around the identified low-bandwidth horizontal dynamics. :contentReference[oaicite:5]{index&#x3D;5}</p>
+<hr>
+<h2 id="Disturbance-Rejection-Strategy"><a href="#Disturbance-Rejection-Strategy" class="headerlink" title="Disturbance Rejection Strategy"></a>Disturbance Rejection Strategy</h2><p>The simulator includes a dynamic wind model containing:</p>
+<ul>
+<li>slowly varying steady-state wind</li>
+<li>random gust disturbances</li>
+<li>continuously changing wind direction</li>
+</ul>
+<p>implemented inside <code>wind.py</code>. :contentReference[oaicite:6]{index&#x3D;6}</p>
+<p>Instead of implementing a full model-based disturbance observer, the controller uses:</p>
+<ul>
+<li>integral action in both loops</li>
+<li>velocity mismatch compensation</li>
+<li>estimated disturbance accumulation</li>
+</ul>
+<p>to reject persistent disturbances.</p>
+<p>This acts as a lightweight disturbance-observer-based compensation structure while remaining computationally simple and compatible with the coursework interface constraints.</p>
+<p>The disturbance-rejection structure significantly reduced:</p>
+<ul>
+<li>steady-state drift</li>
+<li>low-frequency wind bias</li>
+<li>recovery time after gust disturbance</li>
+</ul>
+<p>particularly in the horizontal axes.</p>
+<hr>
+<h2 id="Bayesian-Optimisation-Tuning"><a href="#Bayesian-Optimisation-Tuning" class="headerlink" title="Bayesian Optimisation Tuning"></a>Bayesian Optimisation Tuning</h2><p>Manual tuning proved insufficient due to the large number of coupled gains and the stochastic wind environment.</p>
+<p>Therefore, controller tuning was formulated as a high-dimensional optimisation problem using:</p>
+<ul>
+<li>Gaussian Process Regression (GPR)</li>
+<li>Latin Hypercube Sampling</li>
+<li>Expected Improvement acquisition</li>
+<li>staged cascade tuning</li>
+</ul>
+<p>The optimisation process tuned:</p>
+<ul>
+<li>outer-loop position gains</li>
+<li>velocity-loop gains</li>
+<li>yaw-loop gains</li>
+<li>saturation limits</li>
+<li>integral limits</li>
+</ul>
+<p>against a cost function designed around the coursework marking criteria. </p>
+<p>The cost function penalised:</p>
+<ul>
+<li>slow convergence</li>
+<li>overshoot</li>
+<li>oscillation</li>
+<li>velocity jerk</li>
+<li>steady-state error</li>
+<li>threshold violations</li>
+</ul>
+<p>Targets were regenerated continuously during optimisation to avoid overfitting to a fixed waypoint set. </p>
+<hr>
+<h2 id="Simulation-Environment"><a href="#Simulation-Environment" class="headerlink" title="Simulation Environment"></a>Simulation Environment</h2><p>The simulation environment was implemented in PyBullet and includes:</p>
+<ul>
+<li>UAV rigid-body physics</li>
+<li>aerodynamic drag</li>
+<li>motor lag model</li>
+<li>dynamic wind disturbance</li>
+<li>waypoint switching</li>
+<li>live wind visualisation</li>
+</ul>
+<p>The simulator executes physics at:</p>
+<ul>
+<li>240 Hz physical timestep</li>
+</ul>
+<p>while the outer controller operates at:</p>
+<ul>
+<li>50 Hz position-control frequency</li>
+</ul>
+<p>implemented in <code>run.py</code>. :contentReference[oaicite:9]{index&#x3D;9}</p>
+<p>A major discovery during the project was that:</p>
+<ul>
+<li>the physical simulation step runs at 1&#x2F;240 s</li>
+<li>but the motor model and controller use 1&#x2F;1000 s timing internally</li>
+</ul>
+<p>which effectively slows the inner-loop response by approximately 4×. :contentReference[oaicite:10]{index&#x3D;10}</p>
+<p>This timing mismatch strongly influenced achievable outer-loop bandwidth and disturbance rejection performance.</p>
+<hr>
+<h2 id="Real-Tello-Experiment"><a href="#Real-Tello-Experiment" class="headerlink" title="Real Tello Experiment"></a>Real Tello Experiment</h2><div style="text-align: center;">
+  <video width="40%" controls>
+    <source src="/images/02.mp4" type="video/mp4">
+    your browser does not support the video tag.
+  </video>
+  <p style="font-size: 12px; color: #888; margin-top: 5px;">
+    <em>Real Tello Experiment</em>
+  </p>
+</div>
+
+<p>The controller was also deployed onto a real DJI Tello platform using external motion-capture feedback.</p>
+<p>Although the simulator and real UAV shared the same interface, their dynamics differed substantially. :contentReference[oaicite:11]{index&#x3D;11}</p>
+<p>Several factors contributed to simulation–reality mismatch:</p>
+<ul>
+<li>real motor and battery limitations</li>
+<li>communication delay</li>
+<li>Vicon timing jitter</li>
+<li>noisy localisation feedback</li>
+<li>reduced safe velocity limits</li>
+<li>target switching at fixed intervals</li>
+<li>aerodynamic effects absent from simulation</li>
+</ul>
+<p>The experiment therefore demonstrated not only controller performance, but also the practical limitations of transferring a simulation-tuned controller directly onto real hardware. </p>
+<hr>
+<h2 id="Technical-Highlights"><a href="#Technical-Highlights" class="headerlink" title="Technical Highlights"></a>Technical Highlights</h2><ul>
+<li><strong>Platform:</strong> DJI Tello + PyBullet simulation</li>
+<li><strong>Control architecture:</strong> Cascade PID + disturbance rejection</li>
+<li><strong>System identification:</strong> transfer-function fitting + chirp validation</li>
+<li><strong>Tuning:</strong> Bayesian optimisation with GPR surrogate model</li>
+<li><strong>Simulation:</strong> PyBullet + dynamic wind model</li>
+<li><strong>Programming language:</strong> Python</li>
+<li><strong>Methods used:</strong> coordinate transforms, velocity estimation, automated tuning</li>
+<li><strong>Advanced features:</strong> cascade control, disturbance rejection, automated optimisation</li>
+</ul>
+<hr>
+<h2 id="Key-Lessons-Learned"><a href="#Key-Lessons-Learned" class="headerlink" title="Key Lessons Learned"></a>Key Lessons Learned</h2><p>This project highlighted the importance of:</p>
+<ul>
+<li>understanding the true plant dynamics before tuning controllers</li>
+<li>separating time scales in cascade control systems</li>
+<li>designing controllers around bandwidth limitations</li>
+<li>considering model mismatch between simulation and reality</li>
+<li>using automated optimisation for high-dimensional tuning problems</li>
+</ul>
+<p>The project also reinforced that robust UAV control is fundamentally constrained by:</p>
+<ul>
+<li>actuator delay</li>
+<li>inner-loop bandwidth</li>
+<li>sensing quality</li>
+<li>update frequency</li>
+<li>disturbance estimation accuracy</li>
+</ul>
+<p>rather than simply increasing controller gains.</p>
+<hr>
+<div align="center">
+
+<p><em>“A stable UAV controller is not built by aggressive gains, but by respecting the dynamics hidden underneath the interface.”</em></p>
+</div>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Bayesian-Optimisation/" rel="tag" title="Bayesian Optimisation">Bayesian Optimisation</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Control-Theory/" rel="tag" title="Control Theory">Control Theory</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/DJI-Tello/" rel="tag" title="DJI Tello">DJI Tello</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Disturbance-Observer/" rel="tag" title="Disturbance Observer">Disturbance Observer</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/PID/" rel="tag" title="PID">PID</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/PyBullet/" rel="tag" title="PyBullet">PyBullet</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Python/" rel="tag" title="Python">Python</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Robotics/" rel="tag" title="Robotics">Robotics</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/UAV/" rel="tag" title="UAV">UAV</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/University-of-Manchester/" rel="tag" title="University of Manchester">University of Manchester</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" aria-label="Article navigation" data-aos="fade-up">
+    
+    
+    
+    <div class="article-nav-link-wrap right">
+      
+        <img data-src="/covers/cover9.webp" data-sizes="auto" alt="AERO62520 Project - Leo Rover pick and place robot" class="lazyload">
+      
+      <a href="/2026/03/20/AERO62520_Final_Design_Review/" aria-label="Next: AERO62520 Project - Leo Rover pick and place robot"  title="Next: AERO62520 Project - Leo Rover pick and place robot"></a>
+      <div class="article-nav-caption">Next</div>
+      <h3 class="article-nav-title">
+        
+          AERO62520 Project - Leo Rover pick and place robot
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+
+
+
+
+
+
+
+
+
+</section>
+        </div>
+        <footer id="footer" aria-label="Site footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      
+      
+      
+        2020-2026
+      
+      <span class="footer-info-sep rotate"></span>
+      Shaotong Hong
+    </div>
+    
+      <div>
+        Powered by&nbsp;<a href="https://hexo.io/" rel="noopener nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        4.4k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        00:31
+      </div>
+    
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">Number of visits&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">Number of visitors&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav" aria-label="Mobile navigation">
+  <div class="sidebar-wrap">
+    
+      
+        <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+  
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AERO60492-Coursework-3-UAV-Feedback-Control-Under-Wind-Disturbance"><span class="toc-number">1.</span> <span class="toc-text">AERO60492 Coursework 3: UAV Feedback Control Under Wind Disturbance</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Project-Overview"><span class="toc-number">1.1.</span> <span class="toc-text">Project Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Understanding-the-Provided-Tello-Inner-Loop"><span class="toc-number">1.2.</span> <span class="toc-text">Understanding the Provided Tello Inner Loop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Inner-Loop-Identification-Results"><span class="toc-number">1.3.</span> <span class="toc-text">Inner-Loop Identification Results</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Outer-Loop-Controller-Design"><span class="toc-number">1.4.</span> <span class="toc-text">Outer-Loop Controller Design</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Layer-1-%E2%80%94-Position-Loop"><span class="toc-number">1.4.1.</span> <span class="toc-text">Layer 1 — Position Loop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Layer-2-%E2%80%94-Velocity-Loop"><span class="toc-number">1.4.2.</span> <span class="toc-text">Layer 2 — Velocity Loop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Layer-3-%E2%80%94-Yaw-Loop"><span class="toc-number">1.4.3.</span> <span class="toc-text">Layer 3 — Yaw Loop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Disturbance-Rejection-Strategy"><span class="toc-number">1.5.</span> <span class="toc-text">Disturbance Rejection Strategy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bayesian-Optimisation-Tuning"><span class="toc-number">1.6.</span> <span class="toc-text">Bayesian Optimisation Tuning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Simulation-Environment"><span class="toc-number">1.7.</span> <span class="toc-text">Simulation Environment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Real-Tello-Experiment"><span class="toc-number">1.8.</span> <span class="toc-text">Real Tello Experiment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Technical-Highlights"><span class="toc-number">1.9.</span> <span class="toc-text">Technical Highlights</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Key-Lessons-Learned"><span class="toc-number">1.10.</span> <span class="toc-text">Key Lessons Learned</span></a></li></ol></li></ol>
+  
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Shaotong Hong" class="lazyload">
+  <div class="sidebar-author-name">Shaotong Hong</div>
+  <div class="sidebar-description">Research interests: • Reinforcement learning, •Robot–human interface, •Mechanical design for robotics, •Robotics systems engineering.</div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>Post</div>
+    <div class="sidebar-state-number">9</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>Category</div>
+    <div class="sidebar-state-number">0</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>Tag</div>
+    <div class="sidebar-state-number">40</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+    <div class="icon-github sidebar-social-icon">
+      <a href=https://github.com/longchuanYoRHa itemprop="url" target="_blank" aria-label="github" rel="noopener nofollow noreferrer"></a>
+    </div>
+  
+    <div class="icon-linkedin sidebar-social-icon">
+      <a href=https://www.linkedin.com/in/shaotong-hong-1b029a2b5/ itemprop="url" target="_blank" aria-label="linkedin" rel="noopener nofollow noreferrer"></a>
+    </div>
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="Home"></a>
+        <div class="sidebar-menu-icon icon ">
+          
+            
+              &#xf286;
+            
+          
+        </div>
+        <div class="sidebar-menu-link">Home</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="Archives"></a>
+        <div class="sidebar-menu-icon icon ">
+          
+            
+              &#xf187;
+            
+          
+        </div>
+        <div class="sidebar-menu-link">Archives</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="Personal CV"></a>
+        <div class="sidebar-menu-icon icon ">
+          
+            
+              &#xf2c1;
+            
+          
+        </div>
+        <div class="sidebar-menu-link">Personal CV</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+    
+  </div>
+  
+    
+      <div class="sidebar-btn-wrapper">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div>
+    
+  
+</nav>
+
+    </div>
+    
+    
+    
+    
+<script src="https://fastly.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://fastly.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+
+
+
+
+  
+<script src="https://fastly.jsdelivr.net/npm/mouse-firework@0.1.1/dist/index.umd.js" integrity="sha384-8LyaidD9GPxQQgLJO&#x2F;WRw&#x2F;O2h3BoNq&#x2F;ApI&#x2F;ecpvM6RsrCz2qP2ppBXUKihP4V&#x2F;2d" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["var(--red-1)","var(--red-2)","var(--red-3)","var(--red-4)"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["var(--red-0)"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "Shaotong Hong",
+          title: "AERO60492 Coursework 3 - UAV Feedback Control Under Wind Disturbance",
+          url: "https://longchuanyorha.github.io/2026/05/12/UAV_feedback_controller/",
+          excerpt: "Development of a cascade PID and disturbance-observer-based outer-loop controller for a simulated DJI Tello UAV under dynamic wind disturbance, including inner-loop system identification, Bayesian optimisation tuning, and real-world experiment analysis.",
+          description: "MSc Robotics coursework project focused on robust UAV position stabilisation under dynamic wind disturbance using cascade control, system identification, and automated tuning.",
+          stripContent: "AERO60492 Coursework 3: UAV Feedback Control Under Wind Disturbance Project Overview             your browser does not support the video tag.           Project explanation video       This project focused on developing an advanced feedback controller",
+          date: "Wed May 13 2026 00:00:00 GMT+0100",
+          updated: "Wed May 13 2026 22:43:59 GMT+0100",
+          cover: "/covers/cover10.webp",
+        };
+      </script>
+       
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+        
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://fastly.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        const initPswp = (gallery, children) => {
+          if (_$$(`${gallery} ${children}`).length > 0) {
+            new PhotoSwipeLightbox({
+              gallery,
+              children,
+              pswpModule: () => safeImport("https://fastly.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+        }
+        const pswp = () => {
+          initPswp('.article-entry', 'a.article-gallery-item');
+          initPswp('.article-gallery', 'a.article-gallery-item');
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.10.1' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+
+  
+<script src="https://fastly.jsdelivr.net/npm/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+
+
+
+
+
+    
+  </body>
+  </html>
+
